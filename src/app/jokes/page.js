@@ -7,7 +7,7 @@ const Alljokes = () => {
   useEffect(() => {
     axios
       .get("https://api.freeapi.app/api/v1/public/randomjokes")
-      .then((res) => setData(res.data.data.data));
+      .then((res) => setData(res.data?.data?.data));
   }, []);
 
   return (
