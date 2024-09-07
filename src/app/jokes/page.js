@@ -11,34 +11,36 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
-const Alljokes = () => {
+const AllJokes = () => {
+  const [rows, setData] = useState([]);
+  const [page, pageChange] = useState(0);
+  const [rowPerPage, rowPerPageChange] = useState(5);
+
   const columns = [
     {
       idn: "idn",
       name: "ID",
     },
     {
-      id: "alljokes",
+      id: "AllJokes",
       name: "All JOkes",
     },
   ];
 
-  const handlechangepage = (event, newpage) => {
-    pagechange(newpage);
-  };
-  const handleRowsPerPage = (event) => {
-    rowperpagechange(+event.target.value);
-    pagechange(0);
-  };
-
-  const [rows, setData] = useState([]);
-  const [page, pagechange] = useState(0);
-  const [rowperpage, rowperpagechange] = useState(5);
   useEffect(() => {
     axios
       .get("https://api.freeapi.app/api/v1/public/randomjokes")
       .then((res) => setData(res.data?.data?.data));
   }, []);
+
+  const handleChangePage = (event, newPage) => {
+    pageChange(newPage);
+  };
+
+  const handleRowsPerPage = (event) => {
+    rowPerPageChange(+event.target.value);
+    pageChange(0);
+  };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -53,7 +55,7 @@ const Alljokes = () => {
           </TableHead>
           <TableBody>
             {rows
-              .slice(page * rowperpage, page * rowperpage + rowperpage)
+              .slice(page * rowPerPage, page * rowPerPage + rowPerPage)
               .map((row, i) => {
                 console.log(row);
                 return (
@@ -68,14 +70,14 @@ const Alljokes = () => {
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[2, 5, 10, 20]}
-        rowsPerPage={rowperpage}
+        rowsPerPage={rowPerPage}
         page={page}
         count={rows.length}
         component="div"
-        onPageChange={handlechangepage}
+        onPageChange={handleChangePage}
         onRowsPerPageChange={handleRowsPerPage}
-      ></TablePagination>
+      />
     </Paper>
   );
 };
-export default Alljokes;
+export default AllJokes;
